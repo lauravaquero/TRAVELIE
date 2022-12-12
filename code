@@ -195,15 +195,15 @@ sorting_data = data[sorting_mask]
 
 if sorting_criteria == 'yes':
     a = sorted(sorting_data['Ticket price'])
-    b = quicksort(a)[0]
+    b = (a)[0]
     sorting_mask = (data['Destination'] == destination) & (data['Departure'] == departure) & (data['Ticket price'] == b)
 elif sorting_criteria == 'no':
     a = sorted(sorting_data['Ticket price'])
-    b = quicksort(a)[-1]
+    b = (a)[-1]
     sorting_mask = (data['Destination'] == destination) & (data['Departure'] == departure) & (data['Ticket price'] == b)
 elif sorting_criteria == 'middle':
     a = sorted(sorting_data['Ticket price'])
-    b = quicksort(a)[(len(a)//2)]
+    b = (a)[(len(a)//2)]
     sorting_mask = (data['Destination'] == destination) & (data['Departure'] == departure) & (data['Ticket price'] == b)
 
 final_set = data[sorting_mask]
@@ -250,4 +250,5 @@ For any inquiries about your trip, please contact us at
 help.travelie@travelie.com
 Paseo de la Castellana 297, Madrid
 Spain""")
+ 
  

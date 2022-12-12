@@ -1,661 +1,348 @@
-{
- "cells": [
-  {
-   "cell_type": "code",
-   "execution_count": 1,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "<class 'pandas.core.frame.DataFrame'>\n",
-      "RangeIndex: 72 entries, 0 to 71\n",
-      "Data columns (total 8 columns):\n",
-      " #   Column           Non-Null Count  Dtype  \n",
-      "---  ------           --------------  -----  \n",
-      " 0   Route            72 non-null     object \n",
-      " 1   Mode             72 non-null     object \n",
-      " 2   WeeksAhead       72 non-null     int64  \n",
-      " 3   EcoPassengerCO2  72 non-null     int64  \n",
-      " 4   Raw travel time  72 non-null     int64  \n",
-      " 5   Ticket price     72 non-null     int64  \n",
-      " 6   Hotel            72 non-null     object \n",
-      " 7   Hotel price      0 non-null      float64\n",
-      "dtypes: float64(1), int64(4), object(3)\n",
-      "memory usage: 4.6+ KB\n",
-      "None\n"
-     ]
-    },
-    {
-     "name": "stderr",
-     "output_type": "stream",
-     "text": [
-      "/var/folders/r4/krc9x7p932g8yyshqc9_bp580000gn/T/ipykernel_20193/3225682266.py:45: SettingWithCopyWarning: \n",
-      "A value is trying to be set on a copy of a slice from a DataFrame.\n",
-      "Try using .loc[row_indexer,col_indexer] = value instead\n",
-      "\n",
-      "See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy\n",
-      "  planes_half_dataset['Travel Companies'] = list_choice(AirPlane_Companies,36)\n",
-      "/var/folders/r4/krc9x7p932g8yyshqc9_bp580000gn/T/ipykernel_20193/3225682266.py:47: SettingWithCopyWarning: \n",
-      "A value is trying to be set on a copy of a slice from a DataFrame.\n",
-      "Try using .loc[row_indexer,col_indexer] = value instead\n",
-      "\n",
-      "See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy\n",
-      "  trains_half_dataset['Travel Companies'] = list_choice(Train_Companies,36)\n"
-     ]
-    },
-    {
-     "data": {
-      "text/html": [
-       "<div>\n",
-       "<style scoped>\n",
-       "    .dataframe tbody tr th:only-of-type {\n",
-       "        vertical-align: middle;\n",
-       "    }\n",
-       "\n",
-       "    .dataframe tbody tr th {\n",
-       "        vertical-align: top;\n",
-       "    }\n",
-       "\n",
-       "    .dataframe thead th {\n",
-       "        text-align: right;\n",
-       "    }\n",
-       "</style>\n",
-       "<table border=\"1\" class=\"dataframe\">\n",
-       "  <thead>\n",
-       "    <tr style=\"text-align: right;\">\n",
-       "      <th></th>\n",
-       "      <th>Departure</th>\n",
-       "      <th>Destination</th>\n",
-       "      <th>Means of transport</th>\n",
-       "      <th>Travel Companies</th>\n",
-       "      <th>Ticket price</th>\n",
-       "      <th>Hotel</th>\n",
-       "      <th>Hotel price</th>\n",
-       "      <th>Raw travel time</th>\n",
-       "      <th>WeeksAhead</th>\n",
-       "    </tr>\n",
-       "  </thead>\n",
-       "  <tbody>\n",
-       "    <tr>\n",
-       "      <th>0</th>\n",
-       "      <td>Berlin</td>\n",
-       "      <td>Warsaw</td>\n",
-       "      <td>Train</td>\n",
-       "      <td>Iberia</td>\n",
-       "      <td>149</td>\n",
-       "      <td>Warsawac</td>\n",
-       "      <td>322</td>\n",
-       "      <td>85</td>\n",
-       "      <td>1</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>1</th>\n",
-       "      <td>Berlin</td>\n",
-       "      <td>Milan</td>\n",
-       "      <td>Plane</td>\n",
-       "      <td>Air Europa</td>\n",
-       "      <td>117</td>\n",
-       "      <td>Polandian</td>\n",
-       "      <td>197</td>\n",
-       "      <td>85</td>\n",
-       "      <td>2</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>2</th>\n",
-       "      <td>Berlin</td>\n",
-       "      <td>Budapest</td>\n",
-       "      <td>Plane</td>\n",
-       "      <td>Emirates</td>\n",
-       "      <td>86</td>\n",
-       "      <td>Trivan</td>\n",
-       "      <td>276</td>\n",
-       "      <td>85</td>\n",
-       "      <td>3</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>3</th>\n",
-       "      <td>Berlin</td>\n",
-       "      <td>Warsaw</td>\n",
-       "      <td>Plane</td>\n",
-       "      <td>Air France</td>\n",
-       "      <td>288</td>\n",
-       "      <td>Esquila</td>\n",
-       "      <td>329</td>\n",
-       "      <td>85</td>\n",
-       "      <td>4</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>4</th>\n",
-       "      <td>Berlin</td>\n",
-       "      <td>Budapest</td>\n",
-       "      <td>Train</td>\n",
-       "      <td>Air Europa</td>\n",
-       "      <td>115</td>\n",
-       "      <td>Couso</td>\n",
-       "      <td>208</td>\n",
-       "      <td>85</td>\n",
-       "      <td>5</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>...</th>\n",
-       "      <td>...</td>\n",
-       "      <td>...</td>\n",
-       "      <td>...</td>\n",
-       "      <td>...</td>\n",
-       "      <td>...</td>\n",
-       "      <td>...</td>\n",
-       "      <td>...</td>\n",
-       "      <td>...</td>\n",
-       "      <td>...</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>67</th>\n",
-       "      <td>Zurich</td>\n",
-       "      <td>Amsterdam</td>\n",
-       "      <td>Train</td>\n",
-       "      <td>AUCO</td>\n",
-       "      <td>257</td>\n",
-       "      <td>Perstana</td>\n",
-       "      <td>188</td>\n",
-       "      <td>206</td>\n",
-       "      <td>2</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>68</th>\n",
-       "      <td>Zurich</td>\n",
-       "      <td>Milan</td>\n",
-       "      <td>Plane</td>\n",
-       "      <td>RENFE</td>\n",
-       "      <td>78</td>\n",
-       "      <td>Jouda</td>\n",
-       "      <td>365</td>\n",
-       "      <td>206</td>\n",
-       "      <td>3</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>69</th>\n",
-       "      <td>Zurich</td>\n",
-       "      <td>Budapest</td>\n",
-       "      <td>Plane</td>\n",
-       "      <td>RENFE</td>\n",
-       "      <td>354</td>\n",
-       "      <td>Ferrari Hotel</td>\n",
-       "      <td>272</td>\n",
-       "      <td>206</td>\n",
-       "      <td>4</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>70</th>\n",
-       "      <td>Zurich</td>\n",
-       "      <td>Amsterdam</td>\n",
-       "      <td>Train</td>\n",
-       "      <td>AUIGO</td>\n",
-       "      <td>136</td>\n",
-       "      <td>Lamborghini Hotel</td>\n",
-       "      <td>131</td>\n",
-       "      <td>206</td>\n",
-       "      <td>5</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>71</th>\n",
-       "      <td>Zurich</td>\n",
-       "      <td>Marseille</td>\n",
-       "      <td>Plane</td>\n",
-       "      <td>AUIGO</td>\n",
-       "      <td>270</td>\n",
-       "      <td>Hotel La Pasta</td>\n",
-       "      <td>103</td>\n",
-       "      <td>206</td>\n",
-       "      <td>6</td>\n",
-       "    </tr>\n",
-       "  </tbody>\n",
-       "</table>\n",
-       "<p>72 rows × 9 columns</p>\n",
-       "</div>"
-      ],
-      "text/plain": [
-       "   Departure Destination Means of transport Travel Companies  Ticket price  \\\n",
-       "0     Berlin      Warsaw              Train           Iberia           149   \n",
-       "1     Berlin       Milan              Plane       Air Europa           117   \n",
-       "2     Berlin    Budapest              Plane         Emirates            86   \n",
-       "3     Berlin      Warsaw              Plane       Air France           288   \n",
-       "4     Berlin    Budapest              Train       Air Europa           115   \n",
-       "..       ...         ...                ...              ...           ...   \n",
-       "67    Zurich   Amsterdam              Train             AUCO           257   \n",
-       "68    Zurich       Milan              Plane            RENFE            78   \n",
-       "69    Zurich    Budapest              Plane            RENFE           354   \n",
-       "70    Zurich   Amsterdam              Train            AUIGO           136   \n",
-       "71    Zurich   Marseille              Plane            AUIGO           270   \n",
-       "\n",
-       "               Hotel   Hotel price  Raw travel time  WeeksAhead  \n",
-       "0            Warsawac          322               85           1  \n",
-       "1           Polandian          197               85           2  \n",
-       "2              Trivan          276               85           3  \n",
-       "3             Esquila          329               85           4  \n",
-       "4               Couso          208               85           5  \n",
-       "..                ...          ...              ...         ...  \n",
-       "67          Perstana           188              206           2  \n",
-       "68              Jouda          365              206           3  \n",
-       "69      Ferrari Hotel          272              206           4  \n",
-       "70  Lamborghini Hotel          131              206           5  \n",
-       "71     Hotel La Pasta          103              206           6  \n",
-       "\n",
-       "[72 rows x 9 columns]"
-      ]
-     },
-     "execution_count": 1,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
-   "source": [
-    "#On this collaborate document it is going to be developped the corresponding programming commands to create the\n",
-    "#perfect trip for the cutomer, who is traveling from one city to their desired destination, \n",
-    "# by train or plane and finally staying on a hotel.\n",
-    "# Through the algorithm, the cutomer is going to be asked the budget they are willing to spend, the quality of the transportation: \n",
-    "# high class(related to higher prices) and, finally, the quality of the accomodation, again, \n",
-    "# being high class related to higer prices.\n",
-    "\n",
-    "\n",
-    "#To start with, our dataset was found and downloaded from https://www.kaggle.com/ as an excel file, to finally be imported from excel to python language. \n",
-    "#Altough the dataset, being an excel file, has a high amount of useful data, it will need to be cleaned and added some columns, such as Hotels or Hotel prices.\n",
-    "#As a result, we concluded that pandas package will be the the best option for cleaning, structing, analysis and visualization of the data as it related the \n",
-    "#excel data with our programming language. \n",
-    "\n",
-    "#So, in the next chunk, pandas package will be installed. \n",
-    "\n",
-    "import pandas as pd\n",
-    "import random as rd \n",
-    "\n",
-    "url = \"planehotel.csv\"\n",
-    "\n",
-    "#In order to work with the dataset, we will start by reading it with pandas.\n",
-    "\n",
-    "df = pd.read_csv(url, sep=\",\")\n",
-    "print(df.info())\n",
-    "\n",
-    "\n",
-    "#The dataset does not have prices for the hotel. Our programming knowledge could help us\n",
-    "#by creating random numbers in a range of prices we stablish, taking into account the normal prices\n",
-    "#in the market, we stablish a price range of 50 to 400.\n",
-    "\n",
-    "#For achiving creating random number, we use a for loop in which for every observation,\n",
-    "#a random unique number is added by the command .sample in the new list called: hotel_prices. \n",
-    "#Same for the ticket_prices\n",
-    "rd.seed(2022)\n",
-    "hotel_prices = []\n",
-    "\n",
-    "number_of_observations = 72\n",
-    "numbers = range(50,400)\n",
-    "hotel_prices.append(rd.sample(numbers,number_of_observations))\n",
-    "\n",
-    "ticket_prices = []\n",
-    "ticket_prices.append(rd.sample(numbers,number_of_observations))\n",
-    "\n",
-    "#Then, we create a new variable called \"Hotel price\" with the values form the variable hotel_prices. \n",
-    "#Same for ticket price\n",
-    "df['Hotel price'] = hotel_prices[0]\n",
-    "df['Ticket price'] = ticket_prices[0]\n",
-    "\n",
-    "#To continue with, we aim to offer our customers, among other things, the name of the plane or train company. \n",
-    "#As our initial dataset does not have this variable, we create a new one, again, by a for loop and randomly.\n",
-    "\n",
-    "AirPlane_Companies = ['Iberia', 'Air Europa', 'Easy Jet', 'Air France', 'Emirates', 'Poland Airlines']\n",
-    "Train_Companies = ['RENFE', 'AUIGO', 'AUCO']\n",
-    "companies_planes = []\n",
-    "for i in range(number_of_observations):\n",
-    "    companies_planes.append(rd.choice(AirPlane_Companies))\n",
-    "\n",
-    "companies_trains = []\n",
-    "for i in range(number_of_observations):\n",
-    "    companies_trains.append(rd.choice(Train_Companies))\n",
-    "\n",
-    "#To follow up with, we decided to randomly asign to each trip, if it is going to be made by\n",
-    "#train or plane. This is a benefit because the dataset was previously assigned the same transportation method\n",
-    "#for the same route(ex: plane for Berlin-Warsaw). This idea is executed by filtering the plane and train by \n",
-    "#applying the mask method, followed by a for loop inside a function that randomly assings wheter be travelling by each of the\n",
-    "#modes. Finally, separated dataframes are created, calling the list_choice function, to finally be joined by .concat() function.\n",
-    "\n",
-    "mask_train = df['Mode'] == 'Train'\n",
-    "mask_plane = df['Mode'] == 'Plane'\n",
-    "\n",
-    "def list_choice(list,n):\n",
-    "    for i in range(n):\n",
-    "        return rd.choices(list,k=n)\n",
-    "\n",
-    "df[mask_plane].count() #this will give us the number of travels made by plane\n",
-    "travels_by_plane = 36\n",
-    "travels_by_train = 36\n",
-    "\n",
-    "planes_half_dataset = df[mask_plane]\n",
-    "planes_half_dataset['Travel Companies'] = list_choice(AirPlane_Companies,36)\n",
-    "trains_half_dataset = df[mask_train]\n",
-    "trains_half_dataset['Travel Companies'] = list_choice(Train_Companies,36)\n",
-    "\n",
-    "travelie_df = pd.concat([planes_half_dataset,trains_half_dataset])\n",
-    "\n",
-    "#--------------------------------------------------------------------------------------\n",
-    "\n",
-    "#The last step of cleaning the dataset is creating different variables for departure and destination, as our initial \n",
-    "#dataset had it all in one. For this we create empty lists: destinations and departures, which will be filled by \n",
-    "#for loops which will append in the case of departures the first word from the variable routes, and in the case \n",
-    "#of destinations, the second word. For appending the .append() function is used, and for obtaining the \n",
-    "#first or second word, .split() will be used.\n",
-    "\n",
-    "routes = travelie_df['Route']\n",
-    "destinations = []\n",
-    "departures = []\n",
-    "\n",
-    "for i in routes:\n",
-    "    departures.append(i.split('-')[0])\n",
-    "\n",
-    "for i in routes:\n",
-    "    destinations.append(i.split('-')[1])\n",
-    "\n",
-    "#In order to obtain the same result each time the algorith is run, we use .seed(x). \n",
-    "#To continue with, there are some variables such as mode (because we created new variables) or ecopassengerc02 (not useful anymore)\n",
-    "# that will be eliminated from the dataset by the command .drop(). Also, again, we will recall the list_choice function for the destinations\n",
-    "#to be randomly assigned. This will avoid that a departure just has one destination, which was a limitation from our initial dataset.  \n",
-    "rd.seed(2022)\n",
-    "travelie_df = travelie_df.rename(columns = {'Route':'Departure'})\n",
-    "travelie_df['Departure'] = departures\n",
-    "travelie_df['Destination'] = list_choice(destinations,72)\n",
-    "travelie_df['Means of transport'] = list_choice(travelie_df['Mode'],72)\n",
-    "\n",
-    "travelie_df.drop('Mode', inplace= True, axis = 1)\n",
-    "travelie_df.drop('EcoPassengerCO2', inplace= True, axis = 1)\n",
-    "\n",
-    "#All this must be ordered into the final dataset to be easier to read. This is why we use .iloc \n",
-    "#and we finally call the final_dataset_travelie, to check it out. \n",
-    "travelie_df = travelie_df.iloc[:, [0,7,8,6,3,4,5,2,1]]\n",
-    "final_dataset_travelie = travelie_df\n",
-    "\n",
-    "final_dataset_travelie"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 7,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "Welcome to Travelie!\n",
-      "Please, try again and specify either SIGN IN or CREATE AN ACCOUNT. \n",
-      "Hello, luisjagomez24! \n",
-      "Before we start your journey, let us ask you some quick questions! \n",
-      "Hello, luisjagomez24. The Travelie team hopes you're having an amazing day.\n",
-      "We received your preferences summary, and computed what we consider to be the best trip accoridng to your criteria.\n",
-      "\n",
-      "You will depart from Zurich with destination Amsterdam, to where you will travel with AUCO. The duration of your trip will be of 206 minutes.\n",
-      "During your stay of 2 nights, you will be accommodated at Perstana hotel.\n",
-      "The final price for your stay at Perstana hotel will be of 376€, and the two-way ticket will cost 257€.\n",
-      "\n",
-      "FOR A GRAND TOTAL OF 633 OUT OF YOUR 1000€ BUDGET.\n",
-      "\n",
-      "NOTE: To achieve the best price, we highly recommend that you contract your trip with 2 weeks ahead.\n",
-      "\n",
-      "We hope you have a wonderful time visiting Amsterdam and bid you farewell.\n",
-      "For any inquiries about your trip, please contact us at \n",
-      "\n",
-      "+91 788 901 678\n",
-      "help.travelie@travelie.com\n",
-      "Paseo de la Castellana 297, Madrid\n",
-      "Spain\n"
-     ]
-    }
-   ],
-   "source": [
-    "#–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––\n",
-    "#Up to this point, everything was done in the travelie_dataset.py script.\n",
-    "\n",
-    "\n",
-    "#Our app aims to obtain the best trip according to the customers´s budget, departure and type of transportation. In order to do this,\n",
-    "#we concluded that the easiest way would be to create a quicksort algorithm, where a random number will be taken as a pivot by the \n",
-    "#command rd.choice(). Then, the quicksort will place the pivot in the correct position in a sorted array.\n",
-    "# This will be done by a for loop inside an if conditional, in which if the array has less than 2 numbers, \n",
-    "# the array will be returned, else, as we said a for loop will ccheck again through if conditionals,\n",
-    "#whether the numbers in the array are bigger or smaller than the pivot, returning a sorted list. \n",
-    "\n",
-    "def quicksort(array):\n",
-    "    high = []\n",
-    "    low = []\n",
-    "    if len(array) < 2: \n",
-    "        return array\n",
-    "    else:\n",
-    "        pivot = rd.choice(array)\n",
-    "        for i in array:\n",
-    "            if i < pivot: \n",
-    "                low.append(i)\n",
-    "            elif i > pivot:\n",
-    "                high.append(i)\n",
-    "        return quicksort(low) + [pivot] + quicksort(high)\n",
-    "\n",
-    "#We aim to work several times with our customers, so we will assign each customer an account in order to provide them \n",
-    "#a more personal trait. The code for creating an account consist of inputs that ask the user whether if the have already an account \n",
-    "#or they want to create one. To check it we lower their response and led them to if conditionals where their username and password \n",
-    "#will be saved in this variables. \n",
-    "\n",
-    "print('Welcome to Travelie!')\n",
-    "account = input('Do you want to sign in or create an account?')\n",
-    "account = account.lower()\n",
-    "\n",
-    "if account == 'sign in':\n",
-    "    username = input('Introduce your usernme: ')\n",
-    "    password = input('Introduce your password: ')\n",
-    "            \n",
-    "elif account == 'create an account':\n",
-    "    username = input('Introduce your usernme: ')\n",
-    "    password = input('Introduce your password: ')\n",
-    "        \n",
-    "else:\n",
-    "    print('Please, try again and specify either SIGN IN or CREATE AN ACCOUNT. ')\n",
-    "\n",
-    "\n",
-    "#Before applying the quicksort, we should know the preferences of our customer, as a result, we will\n",
-    "#ask them some questions such as their budget constraint, their prefered way of transport, etc. \n",
-    "\n",
-    "print(f'Hello, {username}! \\nBefore we start your journey, let us ask you some quick questions! ')\n",
-    "\n",
-    "departure = input(f'{username}, where are you traveling from? - Beware first capital letters must be used')\n",
-    "destination = input(f'{username}, Where would you like to travel? - Beware first capital letters must be used ')\n",
-    "budget = int(input(f'{username}, what is the budet you had in mind for your trip? '))\n",
-    "means_of_transport = input(f'{username}, are you traveling by Plane or Train? - Beware first capital letters must be used ')\n",
-    "stay_duration = int(input(f'{username}, how many days will you be staying (nights only) '))\n",
-    "sorting_criteria = input(f'{username}, would you rather pay more for the {means_of_transport} ticket and have a worse experience in the hotel?\\nPLEASE, JUST ANSWER \"YES\", \"NO\" OR \"MIDDLE. ')\n",
-    "sorting_criteria = sorting_criteria.lower()\n",
-    "\n",
-    "\n",
-    "#Once we know the customer preferences, we will apply the quicksort algorithm to the hotel price variable from the dataset as well \n",
-    "#as the ticket price. \n",
-    "hotel_price = final_dataset_travelie['Hotel price']\n",
-    "ticket_price = final_dataset_travelie['Ticket price']\n",
-    "hotelp_sorted = quicksort(hotel_price)\n",
-    "ticket_price_sorted = quicksort(ticket_price)\n",
-    "\n",
-    "# Our customer needs to know the name of the hotel we are offering them. In order to obtain it, we create two empty lists\n",
-    "# which will be filled by the .append() function depending on the hotelp_sorted variable. This is obtained by for loops.\n",
-    "hotel_prices_for_hashing = []\n",
-    "hotels_for_hashing = []\n",
-    "hotel_names = final_dataset_travelie['Hotel ']\n",
-    "\n",
-    "for i in hotel_names:\n",
-    "    hotels_for_hashing.append(i.split(',')[0])\n",
-    "for i in hotelp_sorted:\n",
-    "    hotel_prices_for_hashing.append(i)\n",
-    "\n",
-    "\n",
-    "# Same will be done for ticket prices\n",
-    "ticket_prices_for_hashing = []\n",
-    "transport_means_for_hashing = []\n",
-    "company_name = final_dataset_travelie['Travel Companies']\n",
-    "\n",
-    "for i in company_name:\n",
-    "    transport_means_for_hashing.append(i.split(',')[0])\n",
-    "for i in ticket_price_sorted:\n",
-    "    ticket_prices_for_hashing.append(i)\n",
-    "\n",
-    "#We will need to work with the hotel and transport variable, for it to be easier we will transform it into a hash table.\n",
-    "hotels = dict()\n",
-    "\n",
-    "for i in range(len(hotels_for_hashing)):\n",
-    "    hotels[hotels_for_hashing[i]] = hotel_prices_for_hashing[i]\n",
-    "\n",
-    "transport = dict()\n",
-    "\n",
-    "for i in range(len(transport_means_for_hashing)):\n",
-    "    transport[transport_means_for_hashing[i]] = ticket_prices_for_hashing[i]\n",
-    "\n",
-    "# To continue with, as we  want to hear our customer, we will create different hotel and transport lists according \n",
-    "# the prices: high, low, mid. This criteria will help us meet the customer preferences. This will be done by for loops and \n",
-    "#if conditonals.\n",
-    "\n",
-    "hotels_low = []\n",
-    "hotels_high = []\n",
-    "hotels_mid = []\n",
-    "\n",
-    "transport_low = []\n",
-    "transport_mid = []\n",
-    "transport_high = []\n",
-    "\n",
-    "for hotel in hotels.items():\n",
-    "    if hotel[1] >= 150 and hotel[1] <= 250:\n",
-    "        hotels_mid.append(hotel)\n",
-    "    elif hotel[1] < 150:\n",
-    "        hotels_low.append(hotel)\n",
-    "    else:\n",
-    "        hotels_high.append(hotel)\n",
-    "\n",
-    "for item in transport.items():\n",
-    "    if item[1] < 80:\n",
-    "        transport_low.append(item)\n",
-    "    elif item[1] >= 80 and item[1] <= 150:\n",
-    "        transport_mid.append(item)\n",
-    "    else:\n",
-    "        transport_high.append(item)\n",
-    "\n",
-    "#----------------------------------------------------------------\n",
-    "\n",
-    "# Now, we are finally ready to filter our data for later using it to return an optimised trip. \n",
-    "#We will apply masks depending on the way of transport our customer choses.\n",
-    "\n",
-    "final_mask_train = final_dataset_travelie['Means of transport'] == 'Train'\n",
-    "final_mask_plane = final_dataset_travelie['Means of transport'] == 'Plane'\n",
-    "\n",
-    "if means_of_transport == 'plane':\n",
-    "    data = final_dataset_travelie[final_mask_plane]\n",
-    "else:\n",
-    "    data = final_dataset_travelie[final_mask_train]\n",
-    "\n",
-    "#-------------------------------------------------------------------\n",
-    "# To finish with, we  will relate the price preferences of our customer to the ticket price, depending on the\n",
-    "# destination and departure answers of our customer. This will be done by obtaining: the first number if the \n",
-    "# customer wants to travel as cheap as possible, the middle number if they prefer a middle-class experience, and \n",
-    "# finally the biggest number if they want a luxurious experience.  \n",
-    "\n",
-    "sorting_mask = (data['Destination'] == destination) & (data['Departure'] == departure)\n",
-    "sorting_data = data[sorting_mask]\n",
-    "\n",
-    "if sorting_criteria == 'yes':\n",
-    "    a = sorted(sorting_data['Ticket price'])\n",
-    "    b = quicksort(a)[0]\n",
-    "    sorting_mask = (data['Destination'] == destination) & (data['Departure'] == departure) & (data['Ticket price'] == b)\n",
-    "elif sorting_criteria == 'no':\n",
-    "    a = sorted(sorting_data['Ticket price'])\n",
-    "    b = quicksort(a)[-1]\n",
-    "    sorting_mask = (data['Destination'] == destination) & (data['Departure'] == departure) & (data['Ticket price'] == b)\n",
-    "elif sorting_criteria == 'middle':\n",
-    "    a = sorted(sorting_data['Ticket price'])\n",
-    "    b = quicksort(a)[(len(a)//2)]\n",
-    "    sorting_mask = (data['Destination'] == destination) & (data['Departure'] == departure) & (data['Ticket price'] == b)\n",
-    "\n",
-    "final_set = data[sorting_mask]\n",
-    "\n",
-    "#In order to give our customer their final solution to their desired trip, we will assign the correct category to each \n",
-    "# variable. In case of prices,  we use int so that only one integer will be displayed, \n",
-    "# on the other hand, in the case of name copanies or hotel, we use strings, which will be splitted and indexed to only show\n",
-    "#the desired info, instead of info on our variable too. \n",
-    "\n",
-    "final_company = str(final_set['Travel Companies']).split()[1]\n",
-    "final_ticket_price = int(final_set['Ticket price'])\n",
-    "final_hotel = str(final_set['Hotel ']).split()[1]\n",
-    "final_hotel_price = int(final_set['Hotel price'])\n",
-    "final_travel_time = int(final_set['Raw travel time'])\n",
-    "final_weeks_ahead = int(final_set['WeeksAhead'])\n",
-    "\n",
-    "total_price_stay = stay_duration*final_hotel_price\n",
-    "total_trip_price = (total_price_stay + (final_ticket_price))\n",
-    "\n",
-    "if total_trip_price <= budget:\n",
-    "       print(f\"\"\"Hello, {username}. The Travelie team hopes you're having an amazing day.\n",
-    "We received your preferences summary, and computed what we consider to be the best trip accoridng to your criteria.\n",
-    "\n",
-    "You will depart from {departure} with destination {destination}, to where you will travel with {final_company}. The duration of your trip will be of {final_travel_time} minutes.\n",
-    "During your stay of {stay_duration} nights, you will be accommodated at {final_hotel} hotel.\n",
-    "The final price for your stay at {final_hotel} hotel will be of {total_price_stay}€, and the two-way ticket will cost {final_ticket_price}€.\n",
-    "\n",
-    "FOR A GRAND TOTAL OF {total_trip_price} OUT OF YOUR {budget}€ BUDGET.\n",
-    "\n",
-    "NOTE: To achieve the best price, we highly recommend that you contract your trip with {int(final_weeks_ahead)} weeks anticipation.\n",
-    "\n",
-    "We hope you have a wonderful time visiting {destination} and bid you farewell.\n",
-    "For any inquiries about your trip, please contact us at \n",
-    "\n",
-    "+91 788 901 678\n",
-    "help.travelie@travelie.com\n",
-    "Paseo de la Castellana 297, Madrid\n",
-    "Spain\"\"\")\n",
-    "\n",
-    "else: \n",
-    "    print(f\"\"\"Hello, {username}.The Travelie team hopes you're having an amazing day.\n",
-    "We received your preferences summary, and are very sorry to inform you that we couldn't compute a trip to {destination} according to your preferences.\n",
-    "\n",
-    "For any inquiries about your trip, please contact us at \n",
-    "\n",
-    "+91 788 901 678\n",
-    "help.travelie@travelie.com\n",
-    "Paseo de la Castellana 297, Madrid\n",
-    "Spain\"\"\")\n",
-    " "
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": []
-  }
- ],
- "metadata": {
-  "kernelspec": {
-   "display_name": "Python 3.10.6 64-bit",
-   "language": "python",
-   "name": "python3"
-  },
-  "language_info": {
-   "codemirror_mode": {
-    "name": "ipython",
-    "version": 3
-   },
-   "file_extension": ".py",
-   "mimetype": "text/x-python",
-   "name": "python",
-   "nbconvert_exporter": "python",
-   "pygments_lexer": "ipython3",
-   "version": "3.10.6"
-  },
-  "orig_nbformat": 4,
-  "vscode": {
-   "interpreter": {
-    "hash": "aee8b7b246df8f9039afb4144a1f6fd8d2ca17a180786b69acc140d282b71a49"
-   }
-  }
- },
- "nbformat": 4,
- "nbformat_minor": 2
-}
+#On this collaborate document it is going to be developped the corresponding programming commands to create the
+#perfect trip for the cutomer, who is traveling from one city to their desired destination, 
+# by train or plane and finally staying on a hotel.
+# Through the algorithm, the cutomer is going to be asked the budget they are willing to spend, the quality of the transportation: 
+# high class(related to higher prices) and, finally, the quality of the accomodation, again, 
+# being high class related to higer prices.
+
+
+#To start with, our dataset was found and downloaded from https://www.kaggle.com/ as an excel file, to finally be imported from excel to python language. 
+#Altough the dataset, being an excel file, has a high amount of useful data, it will need to be cleaned and added some columns, such as Hotels or Hotel prices.
+#As a result, we concluded that pandas package will be the the best option for cleaning, structing, analysis and visualization of the data as it related the 
+#excel data with our programming language. 
+
+#So, in the next chunk, pandas package will be installed. 
+
+import pandas as pd
+import random as rd 
+
+url = "planehotel.csv"
+
+#In order to work with the dataset, we will start by reading it with pandas.
+
+df = pd.read_csv(url, sep=",")
+print(df.info())
+
+#The dataset does not have prices for the hotel. Our programming knowledge could help us
+#by creating random numbers in a range of prices we stablish, taking into account the normal prices
+#in the market, we stablish a price range of 50 to 400.
+
+#For achiving creating random number, we use a for loop in which for every observation,
+#a random unique number is added by the command .sample in the new list called: hotel_prices. 
+#Same for the ticket_prices
+
+rd.seed(2022)
+hotel_prices = []
+
+number_of_observations = 72
+numbers = range(50,400)
+hotel_prices.append(rd.sample(numbers,number_of_observations))
+
+ticket_prices = []
+ticket_prices.append(rd.sample(numbers,number_of_observations))
+
+#Then, we create a new variable called "Hotel price" with the values form the variable hotel_prices. 
+#Same for ticket price
+
+df['Hotel price'] = hotel_prices[0]
+df['Ticket price'] = ticket_prices[0]
+
+#To continue with, we aim to offer our customers, among other things, the name of the plane or train company. 
+#As our initial dataset does not have this variable, we create a new one, again, by a for loop and randomly.
+
+AirPlane_Companies = ['Iberia', 'Air Europa', 'Easy Jet', 'Air France', 'Emirates', 'Poland Airlines']
+Train_Companies = ['RENFE', 'AUIGO', 'AUCO']
+companies_planes = []
+for i in range(number_of_observations):
+    companies_planes.append(rd.choice(AirPlane_Companies))
+
+companies_trains = []
+for i in range(number_of_observations):
+    companies_trains.append(rd.choice(Train_Companies))
+
+#To follow up with, we decided to randomly asign to each trip, if it is going to be made by
+#train or plane. This is a benefit because the dataset was previously assigned the same transportation method
+#for the same route(ex: plane for Berlin-Warsaw). This idea is executed by filtering the plane and train by 
+#applying the mask method, followed by a for loop inside a function that randomly assings wheter be travelling by each of the
+#modes. Finally, separated dataframes are created, calling the list_choice function, to finally be joined by .concat() function.
+
+
+mask_train = df['Mode'] == 'Train'
+mask_plane = df['Mode'] == 'Plane'
+
+def list_choice(list,n):
+    for i in range(n):
+        return rd.choices(list,k=n)
+
+df[mask_plane].count() #this will give us the number of travels made by plane
+travels_by_plane = 36
+travels_by_train = 36
+
+planes_half_dataset = df[mask_plane]
+planes_half_dataset['Travel Companies'] = list_choice(AirPlane_Companies,36)
+trains_half_dataset = df[mask_train]
+trains_half_dataset['Travel Companies'] = list_choice(Train_Companies,36)
+
+travelie_df = pd.concat([planes_half_dataset,trains_half_dataset])
+
+#--------------------------------------------------------------------------------------
+
+#The last step of cleaning the dataset is creating different variables for departure and destination, as our initial 
+#dataset had it all in one. For this we create empty lists: destinations and departures, which will be filled by 
+#for loops which will append in the case of departures the first word from the variable routes, and in the case 
+#of destinations, the second word. For appending the .append() function is used, and for obtaining the 
+#first or second word, .split() will be used.
+
+
+routes = travelie_df['Route']
+destinations = []
+departures = []
+
+for i in routes:
+    departures.append(i.split('-')[0])
+
+for i in routes:
+    destinations.append(i.split('-')[1])
+
+#In order to obtain the same result each time the algorith is run, we use .seed(x). 
+#To continue with, there are some variables such as mode (because we created new variables) or ecopassengerc02 (not useful anymore)
+# that will be eliminated from the dataset by the command .drop(). Also, again, we will recall the list_choice function for the destinations
+#to be randomly assigned. This will avoid that a departure just has one destination, which was a limitation from our initial dataset.  
+
+rd.seed(2022)
+travelie_df = travelie_df.rename(columns = {'Route':'Departure'})
+travelie_df['Departure'] = departures
+travelie_df['Destination'] = list_choice(destinations,72)
+travelie_df['Means of transport'] = list_choice(travelie_df['Mode'],72)
+
+travelie_df.drop('Mode', inplace= True, axis = 1)
+travelie_df.drop('EcoPassengerCO2', inplace= True, axis = 1)
+
+#All this must be ordered into the final dataset to be easier to read. This is why we use .iloc 
+#and we finally call the final_dataset_travelie, to check it out. 
+
+travelie_df = travelie_df.iloc[:, [0,7,8,6,3,4,5,2,1]]
+final_dataset_travelie = travelie_df
+
+#–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+#Up to this point, everything was done in the travelie_dataset.py script.
+
+#Up to this point, everything was done in the travelie_dataset.py script.
+
+
+#Our app aims to obtain the best trip according to the customers´s budget, departure and type of transportation. In order to do this,
+#we concluded that the easiest way would be to create a quicksort algorithm, where a random number will be taken as a pivot by the 
+#command rd.choice(). Then, the quicksort will place the pivot in the correct position in a sorted array.
+# This will be done by a for loop inside an if conditional, in which if the array has less than 2 numbers, 
+# the array will be returned, else, as we said a for loop will ccheck again through if conditionals,
+#whether the numbers in the array are bigger or smaller than the pivot, returning a sorted list. 
+
+
+def quicksort(array):
+    high = []
+    low = []
+    if len(array) < 2: 
+        return array
+    else:
+        pivot = rd.choice(array)
+        for i in array:
+            if i < pivot: 
+                low.append(i)
+            elif i > pivot:
+                high.append(i)
+        return quicksort(low) + [pivot] + quicksort(high)
+
+
+#We aim to work several times with our customers, so we will assign each customer an account in order to provide them 
+#a more personal trait. The code for creating an account consist of inputs that ask the user whether if the have already an account 
+#or they want to create one. To check it we lower their response and led them to if conditionals where their username and password 
+#will be saved in this variables. 
+
+
+print('Welcome to Travelie!')
+account = input('Do you want to sign in or create an account?')
+account = account.lower()
+
+if account == 'sign in':
+    username = input('Introduce your usernme: ')
+    password = input('Introduce your password: ')
+            
+elif account == 'create an account':
+    username = input('Introduce your usernme: ')
+    password = input('Introduce your password: ')
+        
+else:
+    print('Please, try again and specify either SIGN IN or CREATE AN ACCOUNT. ')
+
+#Before applying the quicksort, we should know the preferences of our customer, as a result, we will
+#ask them some questions such as their budget constraint, their prefered way of transport, etc. 
+
+
+print(f'Hello, {username}! \nBefore we start your journey, let us ask you some quick questions! ')
+
+departure = input(f'{username}, where are you traveling from? - Beware first capital letters must be used')
+destination = input(f'{username}, Where would you like to travel? - Beware first capital letters must be used ')
+budget = int(input(f'{username}, what is the budget you had in mind for your trip? '))
+means_of_transport = input(f'{username}, are you traveling by Plane or Train? - Beware first capital letters must be used ')
+stay_duration = int(input(f'{username}, how many days will you be staying (nights only) '))
+sorting_criteria = input(f'{username}, would you rather pay more for the {means_of_transport} ticket and have a worse experience in the hotel?\nPLEASE, JUST ANSWER "YES", "NO" OR "MIDDLE. ')
+sorting_criteria = sorting_criteria.lower()
+
+#Once we know the customer preferences, we will apply the quicksort algorithm to the hotel price variable from the dataset as well 
+#as the ticket price. 
+
+hotel_price = final_dataset_travelie['Hotel price']
+ticket_price = final_dataset_travelie['Ticket price']
+hotelp_sorted = quicksort(hotel_price)
+ticket_price_sorted = quicksort(ticket_price)
+
+# Our customer needs to know the name of the hotel we are offering them. In order to obtain it, we create two empty lists
+# which will be filled by the .append() function depending on the hotelp_sorted variable. This is obtained by for loops.
+
+hotel_prices_for_hashing = []
+hotels_for_hashing = []
+hotel_names = final_dataset_travelie['Hotel ']
+
+for i in hotel_names:
+    hotels_for_hashing.append(i.split(',')[0])
+for i in hotelp_sorted:
+    hotel_prices_for_hashing.append(i)
+
+# Same will be done for ticket prices
+
+ticket_prices_for_hashing = []
+transport_means_for_hashing = []
+company_name = final_dataset_travelie['Travel Companies']
+
+for i in company_name:
+    transport_means_for_hashing.append(i.split(',')[0])
+for i in ticket_price_sorted:
+    ticket_prices_for_hashing.append(i)
+
+#We will need to work with the hotel and transport variable, for it to be easier we will transform it into a hash table.
+
+hotels = dict()
+
+for i in range(len(hotels_for_hashing)):
+    hotels[hotels_for_hashing[i]] = hotel_prices_for_hashing[i]
+
+transport = dict()
+
+for i in range(len(transport_means_for_hashing)):
+    transport[transport_means_for_hashing[i]] = ticket_prices_for_hashing[i]
+
+# To continue with, as we  want to hear our customer, we will create different hotel and transport lists according 
+# the prices: high, low, mid. This criteria will help us meet the customer preferences. This will be done by for loops and 
+#if conditonals.
+
+hotels_low = []
+hotels_high = []
+hotels_mid = []
+
+transport_low = []
+transport_mid = []
+transport_high = []
+
+for hotel in hotels.items():
+    if hotel[1] >= 150 and hotel[1] <= 250:
+        hotels_mid.append(hotel)
+    elif hotel[1] < 150:
+        hotels_low.append(hotel)
+    else:
+        hotels_high.append(hotel)
+
+for item in transport.items():
+    if item[1] < 80:
+        transport_low.append(item)
+    elif item[1] >= 80 and item[1] <= 150:
+        transport_mid.append(item)
+    else:
+        transport_high.append(item)
+
+#----------------------------------------------------------------
+
+# Now, we are finally ready to filter our data for later using it to return an optimised trip. 
+#We will apply masks depending on the way of transport our customer choses.
+
+final_mask_train = final_dataset_travelie['Means of transport'] == 'Train'
+final_mask_plane = final_dataset_travelie['Means of transport'] == 'Plane'
+
+if means_of_transport == 'plane':
+    data = final_dataset_travelie[final_mask_plane]
+else:
+    data = final_dataset_travelie[final_mask_train]
+
+#-------------------------------------------------------------------
+
+# To finish with, we  will relate the price preferences of our customer to the ticket price, depending on the
+# destination and departure answers of our customer. This will be done by obtaining: the first number if the 
+# customer wants to travel as cheap as possible, the middle number if they prefer a middle-class experience, and 
+# finally the biggest number if they want a luxurious experience.  
+
+sorting_mask = (data['Destination'] == destination) & (data['Departure'] == departure)
+sorting_data = data[sorting_mask]
+
+if sorting_criteria == 'yes':
+    a = sorted(sorting_data['Ticket price'])
+    b = (a)[0]
+    sorting_mask = (data['Destination'] == destination) & (data['Departure'] == departure) & (data['Ticket price'] == b)
+elif sorting_criteria == 'no':
+    a = sorted(sorting_data['Ticket price'])
+    b = (a)[-1]
+    sorting_mask = (data['Destination'] == destination) & (data['Departure'] == departure) & (data['Ticket price'] == b)
+elif sorting_criteria == 'middle':
+    a = sorted(sorting_data['Ticket price'])
+    b = (a)[(len(a)//2)]
+    sorting_mask = (data['Destination'] == destination) & (data['Departure'] == departure) & (data['Ticket price'] == b)
+
+final_set = data[sorting_mask]
+
+
+#In order to give our customer their final solution to their desired trip, we will assign the correct category to each 
+# variable. In case of prices,  we use int so that only one integer will be displayed, 
+# on the other hand, in the case of name copanies or hotel, we use strings, which will be splitted and indexed to only show
+#the desired info, instead of info on our variable too. 
+
+
+final_company = str(final_set['Travel Companies']).split()[1]
+final_ticket_price = int(final_set['Ticket price'])
+final_hotel = str(final_set['Hotel ']).split()[1]
+final_hotel_price = int(final_set['Hotel price'])
+final_travel_time = int(final_set['Raw travel time'])
+final_weeks_ahead = int(final_set['WeeksAhead'])
+
+total_price_stay = stay_duration*final_hotel_price
+total_trip_price = (total_price_stay + (final_ticket_price))
+
+if total_trip_price <= budget:
+       print(f"""Hello, {username}. The Travelie team hopes you're having an amazing day.
+We received your preferences summary, and computed what we consider to be the best trip accoridng to your criteria.
+
+You will depart from {departure} with destination {destination}, to where you will travel with {final_company}. The duration of your trip will be of {final_travel_time} minutes.
+During your stay of {stay_duration} nights, you will be accommodated at {final_hotel} hotel.
+The final price for your stay at {final_hotel} hotel will be of {total_price_stay}€, and the two-way ticket will cost {final_ticket_price}€.
+
+FOR A GRAND TOTAL OF {total_trip_price} OUT OF YOUR {budget}€ BUDGET.
+
+NOTE: To achieve the best price, we highly recommend that you contract your trip with {int(final_weeks_ahead)} weeks anticipation.
+
+We hope you have a wonderful time visiting {destination} and bid you farewell.
+For any inquiries about your trip, please contact us at 
+
++91 788 901 678
+help.travelie@travelie.com
+Paseo de la Castellana 297, Madrid
+Spain""")
+
+else: 
+    print(f"""Hello, {username}.The Travelie team hopes you're having an amazing day.
+We received your preferences summary, and are very sorry to inform you that we couldn't compute a trip to {destination} according to your preferences.
+
+For any inquiries about your trip, please contact us at 
+
++91 788 901 678
+help.travelie@travelie.com
+Paseo de la Castellana 297, Madrid
+Spain""")
+ 
+
